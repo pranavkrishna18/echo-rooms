@@ -4,12 +4,13 @@ import Navbar from "@/components/Navbar";
 import PostCard from "@/components/PostCard";
 import EmotionBadge from "@/components/EmotionBadge";
 import MoodChart from "@/components/MoodChart";
-import { mockRooms, mockPosts, mockMoodData, classifyEmotion, getRandomAlias, generateAIReply, isToxic, type Post, type Emotion } from "@/lib/mockData";
+import { mockPosts, mockMoodData, classifyEmotion, getRandomAlias, generateAIReply, isToxic, type Post, type Emotion } from "@/lib/mockData";
+import { getAllRooms } from "@/lib/roomsStore";
 import { ArrowLeft, Send, BarChart3, MessageCircle } from "lucide-react";
 
 export default function RoomPage() {
   const { id } = useParams<{ id: string }>();
-  const room = mockRooms.find((r) => r.id === id);
+  const room = getAllRooms().find((r) => r.id === id);
   const [posts, setPosts] = useState<Post[]>(mockPosts.filter((p) => p.roomId === id));
   const [newPost, setNewPost] = useState("");
   const [showChart, setShowChart] = useState(false);
