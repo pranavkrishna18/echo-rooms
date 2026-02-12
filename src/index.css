@@ -41,6 +41,11 @@
     --emotion-hopeful: 145 45% 48%;
     --emotion-angry: 0 65% 55%;
     --emotion-neutral: 200 10% 55%;
+    --emotion-happy: 45 85% 55%;
+    --emotion-stressed: 15 70% 50%;
+    --emotion-lonely: 260 40% 55%;
+    --emotion-excited: 330 70% 55%;
+    --emotion-disappointed: 25 50% 45%;
 
     --sidebar-background: 40 25% 95%;
     --sidebar-foreground: 200 25% 15%;
@@ -129,5 +134,30 @@
   .emotion-badge-neutral {
     background-color: hsl(var(--emotion-neutral) / 0.15);
     color: hsl(var(--emotion-neutral));
+  }
+
+  .emotion-badge-happy {
+    background-color: hsl(var(--emotion-happy) / 0.15);
+    color: hsl(var(--emotion-happy));
+  }
+
+  .emotion-badge-stressed {
+    background-color: hsl(var(--emotion-stressed) / 0.15);
+    color: hsl(var(--emotion-stressed));
+  }
+
+  .emotion-badge-lonely {
+    background-color: hsl(var(--emotion-lonely) / 0.15);
+    color: hsl(var(--emotion-lonely));
+  }
+
+  .emotion-badge-excited {
+    background-color: hsl(var(--emotion-excited) / 0.15);
+    color: hsl(var(--emotion-excited));
+  }
+
+  .emotion-badge-disappointed {
+    background-color: hsl(var(--emotion-disappointed) / 0.15);
+    color: hsl(var(--emotion-disappointed));
   }
 }

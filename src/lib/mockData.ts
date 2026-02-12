@@ -1,4 +1,4 @@
-export type Emotion = "sad" | "anxious" | "hopeful" | "angry" | "neutral";
+export type Emotion = "sad" | "anxious" | "hopeful" | "angry" | "neutral" | "happy" | "stressed" | "lonely" | "excited" | "disappointed";
 
 export interface Post {
   id: string;
@@ -55,6 +55,11 @@ export const EMOTION_LABELS: Record<Emotion, string> = {
   hopeful: "Hopeful",
   angry: "Angry",
   neutral: "Neutral",
+  happy: "Happy",
+  stressed: "Stressed",
+  lonely: "Lonely",
+  excited: "Excited",
+  disappointed: "Disappointed",
 };
 
 export const EMOTION_ICONS: Record<Emotion, string> = {
@@ -63,6 +68,11 @@ export const EMOTION_ICONS: Record<Emotion, string> = {
   hopeful: "🌱",
   angry: "😤",
   neutral: "😐",
+  happy: "😊",
+  stressed: "😫",
+  lonely: "🌙",
+  excited: "🎉",
+  disappointed: "😞",
 };
 
 export const mockRooms: Room[] = [
@@ -166,10 +176,15 @@ export function getRandomAlias(): string {
 
 export function classifyEmotion(text: string): Emotion {
   const lower = text.toLowerCase();
-  if (/fail|cry|miss|hurt|lost|alone|gone|sad|pain|tear/.test(lower)) return "sad";
-  if (/stress|anxious|panic|worry|scared|nervous|overwhelm|breath/.test(lower)) return "anxious";
-  if (/angry|hate|furious|scream|broken|unfair|rage/.test(lower)) return "angry";
-  if (/hope|grateful|thank|happy|joy|smile|better|bright|good/.test(lower)) return "hopeful";
+  if (/excited|thrilled|can't wait|pumped|amazing|awesome|stoked/.test(lower)) return "excited";
+  if (/happy|joy|smile|cheerful|glad|delighted|wonderful|great day/.test(lower)) return "happy";
+  if (/disappoint|letdown|let down|expected more|not what i|frustrated|underwhelm/.test(lower)) return "disappointed";
+  if (/lonely|alone|no one|nobody|isolated|by myself|no friends/.test(lower)) return "lonely";
+  if (/stress|pressure|too much|burned out|burnout|overwhelm|exhausted|overwork/.test(lower)) return "stressed";
+  if (/fail|cry|miss|hurt|lost|gone|sad|pain|tear|grief|mourn/.test(lower)) return "sad";
+  if (/anxious|panic|worry|scared|nervous|breath|dread|uneasy/.test(lower)) return "anxious";
+  if (/angry|hate|furious|scream|broken|unfair|rage|mad/.test(lower)) return "angry";
+  if (/hope|grateful|thank|better|bright|good|optimist|looking forward/.test(lower)) return "hopeful";
   return "neutral";
 }
 
@@ -199,6 +214,26 @@ export function generateAIReply(emotion: Emotion): string {
     neutral: [
       "Thank you for sharing. Sometimes just putting thoughts into words helps. 💚",
       "This community is here for you, whatever you're feeling.",
+    ],
+    happy: [
+      "That's wonderful to hear! Your happiness is contagious. Keep shining! ☀️",
+      "What a great mood! Sharing joy helps everyone around you feel better too. 😊",
+    ],
+    stressed: [
+      "You're carrying a lot right now. Remember to take breaks — you deserve rest. 🧘",
+      "Stress can feel endless, but it's temporary. One step at a time. You've got this. 💪",
+    ],
+    lonely: [
+      "You're not as alone as it feels right now. This community sees you and cares. 🤗",
+      "Loneliness is tough, but reaching out like this is a brave first step. We're here. 💜",
+    ],
+    excited: [
+      "Your excitement is infectious! What an amazing feeling to have! 🎉",
+      "Ride that wave of excitement! These moments make everything worthwhile. 🚀",
+    ],
+    disappointed: [
+      "Disappointment hurts, especially when you had high hopes. It's okay to feel let down. 🫂",
+      "Not every outcome matches our expectations. Give yourself grace — better things are coming. 🌈",
     ],
   };
   const arr = replies[emotion];
