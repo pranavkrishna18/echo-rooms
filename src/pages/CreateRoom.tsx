@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import { ArrowLeft, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
+import { addRoom } from "@/lib/roomsStore";
 
 const EMOJIS = ["📚", "💔", "🌙", "💼", "🌻", "🏠", "🎵", "🧠", "💪", "🌊", "🕊️", "🔥"];
 
@@ -25,6 +26,7 @@ export default function CreateRoom() {
       return;
     }
     setError("");
+    addRoom({ name: name.trim(), description: desc.trim(), emoji });
     setCreated(true);
     setTimeout(() => navigate("/rooms"), 2000);
   };
