@@ -11,11 +11,20 @@ export default function CreateRoom() {
   const [desc, setDesc] = useState("");
   const [emoji, setEmoji] = useState("🌻");
   const [created, setCreated] = useState(false);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleCreate = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim() || !desc.trim()) return;
+    if (!name.trim()) {
+      setError("Please enter a room name.");
+      return;
+    }
+    if (!desc.trim()) {
+      setError("Please enter a description.");
+      return;
+    }
+    setError("");
     setCreated(true);
     setTimeout(() => navigate("/rooms"), 2000);
   };
@@ -43,6 +52,9 @@ export default function CreateRoom() {
             </div>
           ) : (
             <form onSubmit={handleCreate} className="space-y-4">
+              {error && (
+                <div className="rounded-lg bg-destructive/10 p-3 text-sm text-destructive">{error}</div>
+              )}
               <div>
                 <label className="mb-1.5 block text-sm font-medium text-foreground">Room Name</label>
                 <input
