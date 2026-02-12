@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import PostCard from "@/components/PostCard";
@@ -8,13 +8,40 @@ import { mockPosts, mockMoodData, classifyEmotion, getRandomAlias, generateAIRep
 import { getAllRooms } from "@/lib/roomsStore";
 import { ArrowLeft, Send, BarChart3, MessageCircle } from "lucide-react";
 
+const POSTS_KEY = "echoroom_posts";
+
+function loadPosts(roomId: string): Post[] {
+  try {
+    const stored = localStorage.getItem(POSTS_KEY);
+    const all: Post[] = stored ? JSON.parse(stored) : [];
+    const savedForRoom = all.filter((p) => p.roomId === roomId);
+    if (savedForRoom.length > 0) return savedForRoom;
+    return mockPosts.filter((p) => p.roomId === roomId);
+  } catch {
+    return mockPosts.filter((p) => p.roomId === roomId);
+  }
+}
+
+function savePosts(roomId: string, posts: Post[]) {
+  try {
+    const stored = localStorage.getItem(POSTS_KEY);
+    const all: Post[] = stored ? JSON.parse(stored) : [];
+    const otherRooms = all.filter((p) => p.roomId !== roomId);
+    localStorage.setItem(POSTS_KEY, JSON.stringify([...otherRooms, ...posts]));
+  } catch {}
+}
+
 export default function RoomPage() {
   const { id } = useParams<{ id: string }>();
   const room = getAllRooms().find((r) => r.id === id);
-  const [posts, setPosts] = useState<Post[]>(mockPosts.filter((p) => p.roomId === id));
+  const [posts, setPosts] = useState<Post[]>(() => loadPosts(id || ""));
   const [newPost, setNewPost] = useState("");
   const [showChart, setShowChart] = useState(false);
   const [toxicWarning, setToxicWarning] = useState("");
+
+  useEffect(() => {
+    if (id) savePosts(id, posts);
+  }, [posts, id]);
 
   const moodData = mockMoodData[id || ""] || mockMoodData["default"];
 
