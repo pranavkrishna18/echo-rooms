@@ -1,13 +1,25 @@
 import Navbar from "@/components/Navbar";
 import { useAuth } from "@/lib/auth";
-import { mockRooms, mockPosts } from "@/lib/mockData";
+import { type Post } from "@/lib/mockData";
+import { getAllRooms } from "@/lib/roomsStore";
 import { User, MessageCircle, Heart, Calendar } from "lucide-react";
 import RoomCard from "@/components/RoomCard";
 
+function getStoredPosts(): Post[] {
+  try {
+    const stored = localStorage.getItem("echoroom_posts");
+    return stored ? JSON.parse(stored) : [];
+  } catch {
+    return [];
+  }
+}
+
 export default function UserProfile() {
   const { userEmail } = useAuth();
-  const joinedRooms = mockRooms.slice(0, 4);
-  const userPostCount = mockPosts.length;
+  const allRooms = getAllRooms();
+  const storedPosts = getStoredPosts();
+  const userPostCount = storedPosts.length;
+  const repliesCount = storedPosts.reduce((acc, p) => acc + p.replies.filter(r => !r.isAI).length, 0);
 
   return (
     <div className="min-h-screen bg-background">
@@ -24,7 +36,7 @@ export default function UserProfile() {
               <p className="text-sm text-muted-foreground">{userEmail}</p>
               <div className="mt-3 flex items-center gap-4 text-sm text-muted-foreground">
                 <span className="inline-flex items-center gap-1"><MessageCircle size={14} /> {userPostCount} posts</span>
-                <span className="inline-flex items-center gap-1"><Heart size={14} /> {joinedRooms.length} rooms</span>
+                <span className="inline-flex items-center gap-1"><Heart size={14} /> {allRooms.length} rooms</span>
                 <span className="inline-flex items-center gap-1"><Calendar size={14} /> Joined Feb 2025</span>
               </div>
             </div>
@@ -35,8 +47,8 @@ export default function UserProfile() {
         <div className="mb-8 grid grid-cols-3 gap-4">
           {[
             { label: "Posts Shared", value: userPostCount, icon: "📝" },
-            { label: "Rooms Joined", value: joinedRooms.length, icon: "🏠" },
-            { label: "Replies Given", value: 12, icon: "💬" },
+            { label: "Rooms Available", value: allRooms.length, icon: "🏠" },
+            { label: "Replies Given", value: repliesCount, icon: "💬" },
           ].map((stat) => (
             <div key={stat.label} className="glass-card rounded-xl p-5 text-center">
               <span className="mb-1 block text-2xl">{stat.icon}</span>
@@ -49,7 +61,7 @@ export default function UserProfile() {
         {/* Joined Rooms */}
         <h2 className="mb-4 font-display text-xl font-bold text-foreground">Your Rooms</h2>
         <div className="grid gap-4 sm:grid-cols-2">
-          {joinedRooms.map((room) => (
+          {allRooms.map((room) => (
             <RoomCard key={room.id} room={room} />
           ))}
         </div>
