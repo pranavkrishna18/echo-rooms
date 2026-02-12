@@ -1,13 +1,14 @@
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import RoomCard from "@/components/RoomCard";
-import { mockRooms } from "@/lib/mockData";
+import { getAllRooms } from "@/lib/roomsStore";
 import { Plus, Search } from "lucide-react";
 import { useState } from "react";
 
 export default function RoomsDashboard() {
   const [search, setSearch] = useState("");
-  const filtered = mockRooms.filter((r) =>
+  const rooms = getAllRooms();
+  const filtered = rooms.filter((r) =>
     r.name.toLowerCase().includes(search.toLowerCase())
   );
 
