@@ -177,10 +177,10 @@ export function getRandomAlias(): string {
 export function classifyEmotion(text: string): Emotion {
   const lower = text.toLowerCase();
   if (/excited|thrilled|can't wait|pumped|stoked/.test(lower)) return "excited";
-  if (/happ(y|ier|iest)|joy(ful|ous)?|smil(e|ing)|cheerful|glad|delight(ed|ful)?|wonderful|great day|love it|loving|fantastic|amazing|awesome|feeling good|feel good|feels good|beautiful|perfect(ly)?|blessed|yay|woohoo|excellent|superb|nice(st)?|best|greatest|most wonderful|loveliest|prettiest|finest|brilliant|magnificent|terrific|marvelous|splendid|so good|really good|pretty good|proud|achiev(e|ed|ement)|accomplish(ed|ment)?|succeed(ed)?|success(ful)?|triumph|victory|\bwon\b|winning|nailed it|made it|did it|finally done|fulfilled|satisf(ied|ying|action)|thriving|flourish/.test(lower)) return "happy";
+  if (/happ(y|ier|iest)|joy(ful|ous)?|smil(e|ing)|cheerful|glad|delight(ed|ful)?|wonderful|great day|love it|loving|fantastic|amazing|awesome|feeling good|feel good|feels good|beautiful|perfect(ly)?|blessed|yay|woohoo|excellent|superb|nice(st)?|best|greatest|most wonderful|loveliest|prettiest|finest|brilliant|magnificent|terrific|marvelous|splendid|so good|really good|pretty good|proud|achiev(e|ed|ement)|accomplish(ed|ment)?|succeed(ed)?|success(ful)?|triumph|victory|\bwon(?!'t)\b|winning|nailed it|made it|did it|finally done|fulfilled|satisf(ied|ying|action)|thriving|flourish/.test(lower)) return "happy";
   if (/disappoint|letdown|let down|expected more|not what i|frustrated|underwhelm/.test(lower)) return "disappointed";
   if (/lonely|alone|no one|nobody|isolated|by myself|no friends/.test(lower)) return "lonely";
-  if (/stress|pressure|too much|burned out|burnout|overwhelm|exhausted|overwork/.test(lower)) return "stressed";
+  if (/stress|pressure|too much|burned out|burnout|overwhelm|piling up|pile up|deadlines?|can'?t catch a break|don'?t know where to start|won'?t stop racing|racing thoughts?|so much to do|falling behind|behind on|swamped|slammed|buried in|drowning in work|no time|not enough time|running out of time|exhausted|overwork|keep(s)? coming/.test(lower)) return "stressed";
   if (/fail|cry|miss|hurt|lost|gone|sad|pain|tear|grief|mourn/.test(lower)) return "sad";
   if (/anxious|panic|worry|scared|nervous|breath|dread|uneasy/.test(lower)) return "anxious";
   if (/angry|hate|furious|scream|broken|unfair|rage|mad/.test(lower)) return "angry";
