@@ -3,6 +3,7 @@ export type Emotion = "sad" | "anxious" | "hopeful" | "angry" | "neutral" | "hap
 export interface Post {
   id: string;
   roomId: string;
+  userEmail?: string;
   content: string;
   emotion: Emotion;
   timestamp: string;

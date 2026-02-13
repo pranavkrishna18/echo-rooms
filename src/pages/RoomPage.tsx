@@ -6,6 +6,7 @@ import EmotionBadge from "@/components/EmotionBadge";
 import MoodChart from "@/components/MoodChart";
 import { mockPosts, mockMoodData, classifyEmotion, getRandomAlias, generateAIReply, isToxic, type Post, type Emotion } from "@/lib/mockData";
 import { getAllRooms } from "@/lib/roomsStore";
+import { useAuth } from "@/lib/auth";
 import { ArrowLeft, Send, BarChart3, MessageCircle } from "lucide-react";
 
 const POSTS_KEY = "echoroom_posts";
@@ -33,6 +34,7 @@ function savePosts(roomId: string, posts: Post[]) {
 
 export default function RoomPage() {
   const { id } = useParams<{ id: string }>();
+  const { userEmail } = useAuth();
   const room = getAllRooms().find((r) => r.id === id);
   const [posts, setPosts] = useState<Post[]>(() => loadPosts(id || ""));
   const [newPost, setNewPost] = useState("");
@@ -70,6 +72,7 @@ export default function RoomPage() {
     const newPostObj: Post = {
       id: `p${Date.now()}`,
       roomId: room.id,
+      userEmail: userEmail || "anonymous",
       content: newPost.trim(),
       emotion,
       timestamp: new Date().toISOString(),

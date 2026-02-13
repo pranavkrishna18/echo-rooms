@@ -18,8 +18,9 @@ export default function UserProfile() {
   const { userEmail, userName, userProfile } = useAuth();
   const allRooms = getAllRooms();
   const storedPosts = getStoredPosts();
-  const userPostCount = storedPosts.length;
-  const repliesCount = storedPosts.reduce((acc, p) => acc + p.replies.filter(r => !r.isAI).length, 0);
+  const userPosts = storedPosts.filter(p => p.userEmail === userEmail);
+  const userPostCount = userPosts.length;
+  const repliesCount = userPosts.reduce((acc, p) => acc + p.replies.filter(r => !r.isAI).length, 0);
 
   return (
     <div className="min-h-screen bg-background">
