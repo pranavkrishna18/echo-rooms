@@ -25,22 +25,16 @@ export default function RoomsDashboard() {
       <Navbar />
 
       {/* Hero Section */}
-      <div className="relative overflow-hidden border-b border-border bg-gradient-to-br from-primary/5 via-background to-accent/5">
-        <div className="absolute inset-0 opacity-30">
-          <div className="absolute -top-20 -left-20 h-64 w-64 rounded-full bg-primary/10 blur-3xl" />
-          <div className="absolute top-10 right-10 h-48 w-48 rounded-full bg-accent/10 blur-3xl" />
-          <div className="absolute bottom-0 left-1/2 h-32 w-32 -translate-x-1/2 rounded-full bg-primary/5 blur-2xl" />
-        </div>
-
-        <div className="container relative mx-auto px-4 py-12">
+      <div className="relative overflow-hidden border-b border-border/50">
+        <div className="container relative mx-auto px-4 py-14">
           <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-xs font-medium text-primary">
+              <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3.5 py-1.5 text-xs font-medium text-primary backdrop-blur-sm">
                 <Globe size={12} className="animate-[spin_8s_linear_infinite]" />
                 Live emotional spaces
               </div>
               <h1 className="font-display text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
-                Explore <span className="text-primary">Rooms</span>
+                Explore <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Rooms</span>
               </h1>
               <p className="mt-2 max-w-md text-muted-foreground">
                 Find a safe space that resonates with you. Every room is AI-moderated for genuine connection.
@@ -60,7 +54,7 @@ export default function RoomsDashboard() {
               </div>
               <Link
                 to="/create-room"
-                className="inline-flex h-11 items-center gap-2 rounded-xl bg-primary px-5 text-sm font-semibold text-primary-foreground shadow-md shadow-primary/20 transition-all hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/30 hover:-translate-y-0.5"
+                className="inline-flex h-11 items-center gap-2 rounded-xl bg-gradient-to-r from-primary to-primary/85 px-5 text-sm font-semibold text-primary-foreground shadow-md shadow-primary/20 transition-all hover:shadow-lg hover:shadow-primary/30 hover:-translate-y-0.5"
               >
                 <Plus size={16} /> New Room
               </Link>
@@ -69,18 +63,17 @@ export default function RoomsDashboard() {
         </div>
       </div>
 
-      {/* Category Filters + Stats Bar */}
-      <div className="border-b border-border bg-card/50 backdrop-blur-sm">
+      {/* Category Filters */}
+      <div className="border-b border-border/50 bg-card/30 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-3">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            {/* Category chips */}
             <div className="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0">
               <button
                 onClick={() => setActiveCategory("All")}
-                className={`inline-flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
+                className={`inline-flex shrink-0 items-center gap-1.5 rounded-xl px-3.5 py-1.5 text-xs font-semibold transition-all ${
                   activeCategory === "All"
-                    ? "bg-primary text-primary-foreground shadow-sm"
-                    : "bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground"
+                    ? "bg-gradient-to-r from-primary to-primary/85 text-primary-foreground shadow-sm"
+                    : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
                 }`}
               >
                 <LayoutGrid size={12} /> All
@@ -89,10 +82,10 @@ export default function RoomsDashboard() {
                 <button
                   key={cat}
                   onClick={() => setActiveCategory(cat)}
-                  className={`inline-flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
+                  className={`inline-flex shrink-0 items-center gap-1.5 rounded-xl px-3.5 py-1.5 text-xs font-semibold transition-all ${
                     activeCategory === cat
-                      ? "bg-primary text-primary-foreground shadow-sm"
-                      : "bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground"
+                      ? "bg-gradient-to-r from-primary to-primary/85 text-primary-foreground shadow-sm"
+                      : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
                   }`}
                 >
                   <span>{CATEGORY_ICONS[cat]}</span> {cat}
@@ -100,15 +93,14 @@ export default function RoomsDashboard() {
               ))}
             </div>
 
-            {/* Stats */}
             <div className="flex items-center gap-4 text-xs text-muted-foreground">
               <div className="flex items-center gap-1.5">
                 <Sparkles size={12} className="text-primary" />
-                <span className="font-medium text-foreground">{filtered.length}</span> rooms
+                <span className="font-semibold text-foreground">{filtered.length}</span> rooms
               </div>
               <div className="h-3 w-px bg-border" />
               <div>
-                <span className="font-medium text-foreground">{filtered.reduce((sum, r) => sum + r.memberCount, 0)}</span> members
+                <span className="font-semibold text-foreground">{filtered.reduce((sum, r) => sum + r.memberCount, 0)}</span> members
               </div>
             </div>
           </div>
@@ -116,8 +108,8 @@ export default function RoomsDashboard() {
       </div>
 
       {/* Rooms Grid */}
-      <div className="container mx-auto px-4 py-8">
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="container mx-auto px-4 py-10">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {filtered.map((room, i) => (
             <div
               key={room.id}
@@ -131,7 +123,7 @@ export default function RoomsDashboard() {
 
         {filtered.length === 0 && (
           <div className="py-24 text-center">
-            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-muted">
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-secondary">
               <Search size={24} className="text-muted-foreground" />
             </div>
             <h3 className="font-display text-lg font-semibold text-foreground">No rooms found</h3>

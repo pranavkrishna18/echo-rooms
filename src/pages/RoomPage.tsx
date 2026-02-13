@@ -135,13 +135,15 @@ export default function RoomPage() {
       <Navbar />
       <div className="container mx-auto max-w-3xl px-4 py-8">
         {/* Header */}
-        <Link to="/rooms" className="mb-6 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors">
+        <Link to="/rooms" className="mb-6 inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
           <ArrowLeft size={16} /> Back to Rooms
         </Link>
 
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
-            <span className="text-4xl">{room.emoji}</span>
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/10 to-accent/10 text-3xl shadow-sm">
+              {room.emoji}
+            </div>
             <h1 className="font-display text-3xl font-bold text-foreground">{room.name}</h1>
           </div>
           <p className="text-muted-foreground">{room.description}</p>
@@ -161,21 +163,21 @@ export default function RoomPage() {
 
         {/* Mood Chart */}
         {showChart && (
-          <div className="mb-8 glass-card rounded-xl p-5 animate-fade-in">
+          <div className="mb-8 glass-card rounded-2xl p-5 animate-fade-in shadow-sm">
             <h3 className="mb-4 font-display text-lg font-semibold text-foreground">Weekly Mood Trends</h3>
             <MoodChart data={moodData} />
           </div>
         )}
 
         {/* New Post */}
-        <div className="mb-8 glass-card rounded-xl p-5">
+        <div className="mb-8 glass-card rounded-2xl p-6 shadow-sm">
           <h3 className="mb-3 font-display text-base font-semibold text-foreground">Share Anonymously</h3>
           <textarea
             value={newPost}
             onChange={(e) => { setNewPost(e.target.value); setToxicWarning(""); }}
             placeholder="What's on your mind? You'll be given a random alias..."
             rows={3}
-            className="mb-3 w-full resize-none rounded-lg border border-input bg-background p-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+            className="mb-3 w-full resize-none rounded-xl border border-input bg-background/80 p-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition-all"
           />
           {newPost.trim() && (
             <div className="mb-3 flex items-center gap-2 text-sm text-muted-foreground">
@@ -188,7 +190,7 @@ export default function RoomPage() {
           <button
             onClick={handlePost}
             disabled={!newPost.trim() || isChecking}
-            className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-primary px-4 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-40"
+            className="inline-flex h-10 items-center gap-1.5 rounded-xl bg-gradient-to-r from-primary to-primary/85 px-5 text-sm font-semibold text-primary-foreground shadow-md shadow-primary/20 transition-all hover:shadow-lg hover:-translate-y-0.5 disabled:opacity-40"
           >
             {isChecking ? <><Loader2 size={14} className="animate-spin" /> Checking...</> : <><Send size={14} /> Post</>}
           </button>
