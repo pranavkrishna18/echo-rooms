@@ -226,7 +226,9 @@ export default function AdminDashboard() {
 
       <div className="container mx-auto px-4 py-10">
         <div className="mb-8">
-          <h1 className="font-display text-3xl font-bold text-foreground">Admin Dashboard</h1>
+          <h1 className="font-display text-3xl font-bold tracking-tight text-foreground">
+            Admin <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Dashboard</span>
+          </h1>
           <p className="mt-1 text-muted-foreground">Monitor community health, manage rooms & moderate content</p>
         </div>
 

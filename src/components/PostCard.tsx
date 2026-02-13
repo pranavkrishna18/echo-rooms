@@ -65,7 +65,7 @@ export default function PostCard({ post, onReply, currentUserName }: PostCardPro
   };
 
   return (
-    <div className={`glass-card rounded-xl p-5 ${post.flaggedToxic ? "border-destructive/30" : ""}`}>
+    <div className={`glass-card rounded-2xl p-5 shadow-sm ${post.flaggedToxic ? "border-destructive/30" : ""}`}>
       <div className="mb-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span className="text-sm font-medium text-foreground">{post.authorAlias}</span>
@@ -88,7 +88,7 @@ export default function PostCard({ post, onReply, currentUserName }: PostCardPro
       {post.replies.length > 0 && (
         <div className="space-y-3 border-t border-border pt-3">
           {post.replies.map((reply) => (
-            <div key={reply.id} className={`rounded-lg p-3 ${reply.isAI ? "bg-primary/5 border border-primary/10" : "bg-muted/50"}`}>
+            <div key={reply.id} className={`rounded-xl p-3 ${reply.isAI ? "bg-primary/5 border border-primary/10" : "bg-secondary/50"}`}>
               <div className="mb-1 flex items-center gap-2">
                 <span className="text-xs font-medium text-foreground">
                   {reply.authorAlias}
@@ -123,7 +123,7 @@ export default function PostCard({ post, onReply, currentUserName }: PostCardPro
               onChange={(e) => { setReplyText(e.target.value); setToxicWarning(""); }}
               placeholder="Write a reply..."
               rows={2}
-              className="w-full resize-none rounded-lg border border-input bg-background p-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+              className="w-full resize-none rounded-xl border border-input bg-background/80 p-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition-all"
             />
             {toxicWarning && (
               <div className="rounded-lg bg-destructive/10 px-3 py-1.5 text-xs text-destructive">{toxicWarning}</div>
@@ -132,7 +132,7 @@ export default function PostCard({ post, onReply, currentUserName }: PostCardPro
               <button
                 onClick={handleReply}
                 disabled={!replyText.trim() || isChecking}
-                className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-primary px-3 text-xs font-semibold text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-40"
+                className="inline-flex h-8 items-center gap-1.5 rounded-xl bg-gradient-to-r from-primary to-primary/85 px-4 text-xs font-semibold text-primary-foreground shadow-sm transition-all hover:shadow-md disabled:opacity-40"
               >
                 {isChecking ? <><Loader2 size={12} className="animate-spin" /> Checking...</> : <><Send size={12} /> Reply</>}
               </button>

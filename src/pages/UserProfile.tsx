@@ -36,20 +36,17 @@ export default function UserProfile() {
   const allRooms = getAllRooms();
   const allPosts = getStoredPosts();
 
-  // Count posts authored by this user
   const userPosts = allPosts.filter(p => p.userEmail === userEmail || p.authorAlias === userName);
   const userPostCount = userPosts.length;
 
-  // Count replies given BY this user across ALL posts
   const repliesCount = allPosts.reduce((acc, p) => {
     return acc + p.replies.filter(r => !r.isAI && r.authorAlias === userName).length;
   }, 0);
 
-  // Warnings for this user
   const warnings = loadWarnings();
   const userKey = userEmail || userName || "";
   const myWarnings = warnings[userKey] || warnings[userName || ""] || [];
-  // Show warnings as toasts
+
   useEffect(() => {
     if (!isAdmin && myWarnings.length > 0) {
       myWarnings.forEach((w, i) => {
@@ -58,12 +55,12 @@ export default function UserProfile() {
             <div className="flex items-start gap-3">
               <span className="text-xl mt-0.5">⚠️</span>
               <div className="flex-1">
-                <p className="font-semibold text-sm text-red-700">Admin Warning</p>
-                <p className="text-sm text-gray-600 mt-1">{w}</p>
+                <p className="font-semibold text-sm text-destructive">Admin Warning</p>
+                <p className="text-sm text-muted-foreground mt-1">{w}</p>
               </div>
               <button
                 onClick={() => toast.dismiss(t.id)}
-                className="text-gray-400 hover:text-gray-600 text-lg leading-none"
+                className="text-muted-foreground hover:text-foreground text-lg leading-none"
               >
                 ×
               </button>
@@ -72,13 +69,13 @@ export default function UserProfile() {
             duration: 8000,
             position: "top-right",
             style: {
-              background: "#FEF2F2",
-              border: "1px solid #FECACA",
-              borderLeft: "4px solid #EF4444",
+              background: "hsl(var(--card))",
+              border: "1px solid hsl(var(--destructive) / 0.2)",
+              borderLeft: "4px solid hsl(var(--destructive))",
               padding: "16px",
               maxWidth: "400px",
-              borderRadius: "12px",
-              boxShadow: "0 10px 25px -5px rgba(239, 68, 68, 0.15)",
+              borderRadius: "16px",
+              boxShadow: "0 10px 25px -5px hsl(var(--destructive) / 0.15)",
             },
           });
         }, i * 600);
@@ -93,9 +90,9 @@ export default function UserProfile() {
       <Navbar />
       <div className="container mx-auto max-w-3xl px-4 py-10">
         {/* Profile Header */}
-        <div className="glass-card rounded-2xl p-8 mb-8">
+        <div className="glass-card rounded-3xl p-8 mb-8 shadow-lg shadow-primary/5">
           <div className="flex items-center gap-5">
-            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-primary/10 text-primary">
+            <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-accent text-white shadow-lg shadow-primary/25">
               <User size={36} />
             </div>
             <div>
@@ -117,7 +114,7 @@ export default function UserProfile() {
             { label: "Rooms Available", value: allRooms.length, icon: "🏠" },
             { label: "Replies Given", value: repliesCount, icon: "💬" },
           ].map((stat) => (
-            <div key={stat.label} className="glass-card rounded-xl p-5 text-center">
+            <div key={stat.label} className="glass-card rounded-2xl p-5 text-center shadow-sm">
               <span className="mb-1 block text-2xl">{stat.icon}</span>
               <p className="text-2xl font-bold text-foreground">{stat.value}</p>
               <p className="text-xs text-muted-foreground">{stat.label}</p>
