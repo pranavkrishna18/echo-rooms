@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import RoomCard from "@/components/RoomCard";
+import UserChatbot from "@/components/UserChatbot";
 import { getAllRooms } from "@/lib/roomsStore";
 import { Plus, Search } from "lucide-react";
 import { useState } from "react";
@@ -52,6 +53,7 @@ export default function RoomsDashboard() {
           </div>
         )}
       </div>
+      <UserChatbot />
     </div>
   );
 }
