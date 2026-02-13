@@ -7,7 +7,9 @@ import MoodChart from "@/components/MoodChart";
 import { mockPosts, mockMoodData, classifyEmotion, generateAIReply, isToxic, type Post, type Reply, type Emotion } from "@/lib/mockData";
 import { getAllRooms } from "@/lib/roomsStore";
 import { useAuth } from "@/lib/auth";
-import { ArrowLeft, Send, BarChart3, MessageCircle } from "lucide-react";
+import { checkToxicity, autoWarnUser } from "@/lib/aiService";
+import { ArrowLeft, Send, BarChart3, MessageCircle, Loader2 } from "lucide-react";
+import toast, { Toaster } from "react-hot-toast";
 
 const POSTS_KEY = "echoroom_posts";
 
@@ -40,6 +42,7 @@ export default function RoomPage() {
   const [newPost, setNewPost] = useState("");
   const [showChart, setShowChart] = useState(false);
   const [toxicWarning, setToxicWarning] = useState("");
+  const [isChecking, setIsChecking] = useState(false);
 
   useEffect(() => {
     if (id) savePosts(id, posts);
@@ -64,13 +67,37 @@ export default function RoomPage() {
     ));
   };
 
-  const handlePost = () => {
+  const handlePost = async () => {
     if (!newPost.trim()) return;
 
+    // Quick local check first
     if (isToxic(newPost)) {
       setToxicWarning("⚠️ Your message was flagged as potentially harmful. Please rephrase with kindness.");
+      autoWarnUser(userName || userEmail || "Anonymous", "Attempted to post vulgar content (local filter)");
+      toast.error("Your post was blocked for inappropriate content.", {
+        style: { borderRadius: "12px" },
+      });
       return;
     }
+
+    // AI-powered toxicity check
+    setIsChecking(true);
+    setToxicWarning("");
+    try {
+      const result = await checkToxicity(newPost, userName || "Anonymous");
+      if (result.is_toxic) {
+        setToxicWarning(`⚠️ AI detected inappropriate content: ${result.reason}. Please rephrase.`);
+        autoWarnUser(userName || userEmail || "Anonymous", `AI flagged post as ${result.severity}: ${result.reason}`);
+        toast.error("Your post was blocked by AI moderation.", {
+          style: { borderRadius: "12px" },
+        });
+        setIsChecking(false);
+        return;
+      }
+    } catch (e) {
+      console.error("AI check failed, proceeding with local filter:", e);
+    }
+    setIsChecking(false);
 
     setToxicWarning("");
     const emotion: Emotion = classifyEmotion(newPost);
@@ -102,6 +129,7 @@ export default function RoomPage() {
 
   return (
     <div className="min-h-screen bg-background">
+      <Toaster />
       <Navbar />
       <div className="container mx-auto max-w-3xl px-4 py-8">
         {/* Header */}
@@ -157,10 +185,10 @@ export default function RoomPage() {
           )}
           <button
             onClick={handlePost}
-            disabled={!newPost.trim()}
+            disabled={!newPost.trim() || isChecking}
             className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-primary px-4 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-40"
           >
-            <Send size={14} /> Post
+            {isChecking ? <><Loader2 size={14} className="animate-spin" /> Checking...</> : <><Send size={14} /> Post</>}
           </button>
         </div>
 

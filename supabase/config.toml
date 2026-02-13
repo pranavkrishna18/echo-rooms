@@ -1,0 +1,7 @@
+project_id = "srjkqwnsnkzbulvxptjz"
+
+[functions.check-toxicity]
+verify_jwt = false
+
+[functions.admin-chat]
+verify_jwt = false

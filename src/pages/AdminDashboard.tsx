@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import MoodChart from "@/components/MoodChart";
+import AdminChatbot from "@/components/AdminChatbot";
 import EmotionBadge from "@/components/EmotionBadge";
 import { mockMoodData, mockPosts, type Post, type Room } from "@/lib/mockData";
 import { getAllRooms, deleteRoom, isDefaultRoom } from "@/lib/roomsStore";
@@ -21,7 +22,6 @@ function loadAllPosts(): Post[] {
     const savedPosts: Post[] = stored ? JSON.parse(stored) : [];
     const savedRoomIds = new Set(savedPosts.map((p) => p.roomId));
     const unsavedMockPosts = mockPosts.filter((p) => !savedRoomIds.has(p.roomId));
-    return [...savedPosts, ...unsavedMockPosts];
     return [...savedPosts, ...unsavedMockPosts];
   } catch {
     return [];
@@ -499,6 +499,11 @@ export default function AdminDashboard() {
           </div>
         )}
       </div>
+
+      {/* Admin AI Chatbot */}
+      <AdminChatbot
+        communityContext={`Total Rooms: ${rooms.length}. Total Posts: ${totalPosts}. Flagged (No Reply): ${flaggedPosts}. Toxic Flagged: ${toxicPosts}. AI Replies: ${aiReplies}. Active Users: ${userMap.size}. Room names: ${rooms.map(r => r.name).join(", ")}. Users with warnings: ${Object.keys(warnings).join(", ") || "None"}.`}
+      />
     </div>
   );
 }
