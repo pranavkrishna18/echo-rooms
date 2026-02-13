@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import RoomCard from "@/components/RoomCard";
 import UserChatbot from "@/components/UserChatbot";
+import AnimatedBackground from "@/components/AnimatedBackground";
 import { getAllRooms } from "@/lib/roomsStore";
 import { ROOM_CATEGORIES, CATEGORY_ICONS, type RoomCategory } from "@/lib/mockData";
 import { Plus, Search, Sparkles, Globe, LayoutGrid } from "lucide-react";
@@ -20,6 +21,7 @@ export default function RoomsDashboard() {
 
   return (
     <div className="min-h-screen bg-background">
+      <AnimatedBackground />
       <Navbar />
 
       {/* Hero Section */}

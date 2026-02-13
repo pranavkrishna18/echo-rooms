@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
+import AnimatedBackground from "@/components/AnimatedBackground";
 import { Heart, Shield, BarChart3, Users, MessageCircle, Sparkles } from "lucide-react";
 
 const features = [
@@ -14,6 +15,7 @@ const features = [
 export default function Landing() {
   return (
     <div className="min-h-screen bg-background">
+      <AnimatedBackground />
       <Navbar />
 
       {/* Hero */}

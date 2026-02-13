@@ -103,6 +103,31 @@
 }
 
 @layer utilities {
+  @keyframes drift-1 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    25% { transform: translate(60px, 40px) scale(1.05); }
+    50% { transform: translate(20px, 80px) scale(0.95); }
+    75% { transform: translate(-40px, 30px) scale(1.02); }
+  }
+  @keyframes drift-2 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    25% { transform: translate(-50px, 60px) scale(1.08); }
+    50% { transform: translate(-80px, -20px) scale(0.92); }
+    75% { transform: translate(30px, -50px) scale(1.04); }
+  }
+  @keyframes drift-3 {
+    0%, 100% { transform: translate(0, 0); }
+    33% { transform: translate(70px, -40px); }
+    66% { transform: translate(-30px, -60px); }
+  }
+  @keyframes drift-4 {
+    0%, 100% { transform: translate(-50%, 0) scale(1); }
+    50% { transform: translate(-50%, -60px) scale(1.1); }
+  }
+  @keyframes particle {
+    0%, 100% { transform: translateY(0) scale(1); opacity: 0.4; }
+    50% { transform: translateY(-20px) scale(1.5); opacity: 0.8; }
+  }
   .font-display {
     font-family: 'Playfair Display', serif;
   }
