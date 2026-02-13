@@ -51,3 +51,38 @@ export function deleteRoom(roomId: string) {
 export function isDefaultRoom(roomId: string): boolean {
   return mockRooms.some(r => r.id === roomId);
 }
+
+const JOINED_KEY = "echoroom_joined_rooms";
+
+export function getJoinedRooms(email: string): string[] {
+  try {
+    const stored = localStorage.getItem(JOINED_KEY);
+    const all: Record<string, string[]> = stored ? JSON.parse(stored) : {};
+    return all[email] || [];
+  } catch {
+    return [];
+  }
+}
+
+export function joinRoom(email: string, roomId: string) {
+  const stored = localStorage.getItem(JOINED_KEY);
+  const all: Record<string, string[]> = stored ? JSON.parse(stored) : {};
+  if (!all[email]) all[email] = [];
+  if (!all[email].includes(roomId)) {
+    all[email].push(roomId);
+    localStorage.setItem(JOINED_KEY, JSON.stringify(all));
+  }
+}
+
+export function leaveRoom(email: string, roomId: string) {
+  const stored = localStorage.getItem(JOINED_KEY);
+  const all: Record<string, string[]> = stored ? JSON.parse(stored) : {};
+  if (all[email]) {
+    all[email] = all[email].filter(id => id !== roomId);
+    localStorage.setItem(JOINED_KEY, JSON.stringify(all));
+  }
+}
+
+export function hasJoinedRoom(email: string, roomId: string): boolean {
+  return getJoinedRooms(email).includes(roomId);
+}
