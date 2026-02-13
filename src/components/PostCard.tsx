@@ -1,6 +1,7 @@
-import { Post } from "@/lib/mockData";
+import { useState } from "react";
+import { Post, Reply, isToxic } from "@/lib/mockData";
 import EmotionBadge from "./EmotionBadge";
-import { Clock, AlertTriangle, Bot, Flag } from "lucide-react";
+import { Clock, AlertTriangle, Bot, Flag, Send, MessageCircle } from "lucide-react";
 
 function timeAgo(timestamp: string): string {
   const diff = Date.now() - new Date(timestamp).getTime();
@@ -11,7 +12,37 @@ function timeAgo(timestamp: string): string {
   return `${Math.floor(hrs / 24)}d ago`;
 }
 
-export default function PostCard({ post }: { post: Post }) {
+interface PostCardProps {
+  post: Post;
+  onReply?: (postId: string, reply: Reply) => void;
+  currentUserName?: string;
+}
+
+export default function PostCard({ post, onReply, currentUserName }: PostCardProps) {
+  const [replyText, setReplyText] = useState("");
+  const [showReplyInput, setShowReplyInput] = useState(false);
+  const [toxicWarning, setToxicWarning] = useState("");
+
+  const handleReply = () => {
+    if (!replyText.trim() || !onReply) return;
+    if (isToxic(replyText)) {
+      setToxicWarning("⚠️ Message flagged as potentially harmful. Please rephrase.");
+      return;
+    }
+    setToxicWarning("");
+    const reply: Reply = {
+      id: `r${Date.now()}`,
+      content: replyText.trim(),
+      authorAlias: currentUserName || "Anonymous",
+      timestamp: new Date().toISOString(),
+      isAI: false,
+      flaggedToxic: false,
+    };
+    onReply(post.id, reply);
+    setReplyText("");
+    setShowReplyInput(false);
+  };
+
   return (
     <div className={`glass-card rounded-xl p-5 ${post.flaggedToxic ? "border-destructive/30" : ""}`}>
       <div className="mb-3 flex items-center justify-between">
@@ -54,6 +85,46 @@ export default function PostCard({ post }: { post: Post }) {
           ))}
         </div>
       )}
+
+      {/* Reply section */}
+      <div className="mt-3 border-t border-border pt-3">
+        {!showReplyInput ? (
+          <button
+            onClick={() => setShowReplyInput(true)}
+            className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <MessageCircle size={14} /> Reply
+          </button>
+        ) : (
+          <div className="space-y-2">
+            <textarea
+              value={replyText}
+              onChange={(e) => { setReplyText(e.target.value); setToxicWarning(""); }}
+              placeholder="Write a reply..."
+              rows={2}
+              className="w-full resize-none rounded-lg border border-input bg-background p-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+            />
+            {toxicWarning && (
+              <div className="rounded-lg bg-destructive/10 px-3 py-1.5 text-xs text-destructive">{toxicWarning}</div>
+            )}
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handleReply}
+                disabled={!replyText.trim()}
+                className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-primary px-3 text-xs font-semibold text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-40"
+              >
+                <Send size={12} /> Reply
+              </button>
+              <button
+                onClick={() => { setShowReplyInput(false); setReplyText(""); setToxicWarning(""); }}
+                className="h-8 rounded-lg px-3 text-xs text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

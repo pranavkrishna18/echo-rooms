@@ -4,7 +4,7 @@ import Navbar from "@/components/Navbar";
 import PostCard from "@/components/PostCard";
 import EmotionBadge from "@/components/EmotionBadge";
 import MoodChart from "@/components/MoodChart";
-import { mockPosts, mockMoodData, classifyEmotion, getRandomAlias, generateAIReply, isToxic, type Post, type Emotion } from "@/lib/mockData";
+import { mockPosts, mockMoodData, classifyEmotion, generateAIReply, isToxic, type Post, type Reply, type Emotion } from "@/lib/mockData";
 import { getAllRooms } from "@/lib/roomsStore";
 import { useAuth } from "@/lib/auth";
 import { ArrowLeft, Send, BarChart3, MessageCircle } from "lucide-react";
@@ -57,6 +57,12 @@ export default function RoomPage() {
       </div>
     );
   }
+
+  const handleReply = (postId: string, reply: Reply) => {
+    setPosts(prev => prev.map(p =>
+      p.id === postId ? { ...p, replies: [...p.replies, reply], flaggedNoReply: false } : p
+    ));
+  };
 
   const handlePost = () => {
     if (!newPost.trim()) return;
@@ -162,7 +168,7 @@ export default function RoomPage() {
         <div className="space-y-4">
           {posts.map((post, i) => (
             <div key={post.id} className="opacity-0 animate-fade-in" style={{ animationDelay: `${i * 60}ms` }}>
-              <PostCard post={post} />
+              <PostCard post={post} onReply={handleReply} currentUserName={userName || "Anonymous"} />
             </div>
           ))}
           {posts.length === 0 && (
