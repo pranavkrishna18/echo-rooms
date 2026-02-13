@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import MoodChart from "@/components/MoodChart";
 import EmotionBadge from "@/components/EmotionBadge";
-import { mockMoodData, type Post, type Room } from "@/lib/mockData";
+import { mockMoodData, mockPosts, type Post, type Room } from "@/lib/mockData";
 import { getAllRooms, deleteRoom, isDefaultRoom } from "@/lib/roomsStore";
 import { useAuth } from "@/lib/auth";
 import {
@@ -17,7 +17,11 @@ const WARNINGS_KEY = "echoroom_warnings";
 function loadAllPosts(): Post[] {
   try {
     const stored = localStorage.getItem(POSTS_KEY);
-    return stored ? JSON.parse(stored) : [];
+    const savedPosts: Post[] = stored ? JSON.parse(stored) : [];
+    const savedRoomIds = new Set(savedPosts.map((p) => p.roomId));
+    const unsavedMockPosts = mockPosts.filter((p) => !savedRoomIds.has(p.roomId));
+    return [...savedPosts, ...unsavedMockPosts];
+    return [...savedPosts, ...unsavedMockPosts];
   } catch {
     return [];
   }
