@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import MoodChart from "@/components/MoodChart";
+import AnimatedBackground from "@/components/AnimatedBackground";
 import AdminChatbot from "@/components/AdminChatbot";
 import EmotionBadge from "@/components/EmotionBadge";
 import { mockMoodData, mockPosts, type Post, type Room } from "@/lib/mockData";
@@ -180,6 +181,7 @@ export default function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-background">
+      <AnimatedBackground />
       <Toaster />
       <Navbar />
 

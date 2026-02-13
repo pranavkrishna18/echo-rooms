@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
+import AnimatedBackground from "@/components/AnimatedBackground";
 import { Eye, EyeOff } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 
@@ -28,6 +29,7 @@ export default function Register() {
 
   return (
     <div className="min-h-screen bg-background">
+      <AnimatedBackground />
       <Navbar />
       <div className="flex items-center justify-center px-4 py-20">
         <div className="w-full max-w-md">

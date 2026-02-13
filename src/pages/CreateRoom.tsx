@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import { ArrowLeft, Sparkles } from "lucide-react";
+import AnimatedBackground from "@/components/AnimatedBackground";
 import { Link } from "react-router-dom";
 import { addRoom } from "@/lib/roomsStore";
 import { ROOM_CATEGORIES, CATEGORY_ICONS, type RoomCategory } from "@/lib/mockData";
@@ -35,6 +36,7 @@ export default function CreateRoom() {
 
   return (
     <div className="min-h-screen bg-background">
+      <AnimatedBackground />
       <Navbar />
       <div className="container mx-auto max-w-lg px-4 py-10">
         <Link to="/rooms" className="mb-6 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors">

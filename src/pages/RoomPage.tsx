@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
+import AnimatedBackground from "@/components/AnimatedBackground";
 import PostCard from "@/components/PostCard";
 import EmotionBadge from "@/components/EmotionBadge";
 import MoodChart from "@/components/MoodChart";
@@ -129,6 +130,7 @@ export default function RoomPage() {
 
   return (
     <div className="min-h-screen bg-background">
+      <AnimatedBackground />
       <Toaster />
       <Navbar />
       <div className="container mx-auto max-w-3xl px-4 py-8">

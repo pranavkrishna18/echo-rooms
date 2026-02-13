@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import Navbar from "@/components/Navbar";
+import AnimatedBackground from "@/components/AnimatedBackground";
 import { useAuth } from "@/lib/auth";
 import { mockPosts, type Post } from "@/lib/mockData";
 import { getAllRooms } from "@/lib/roomsStore";
@@ -87,6 +88,7 @@ export default function UserProfile() {
 
   return (
     <div className="min-h-screen bg-background">
+      <AnimatedBackground />
       <Toaster />
       <Navbar />
       <div className="container mx-auto max-w-3xl px-4 py-10">
