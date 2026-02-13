@@ -15,7 +15,7 @@ function getStoredPosts(): Post[] {
 }
 
 export default function UserProfile() {
-  const { userEmail, userName } = useAuth();
+  const { userEmail, userName, userProfile } = useAuth();
   const allRooms = getAllRooms();
   const storedPosts = getStoredPosts();
   const userPostCount = storedPosts.length;
@@ -37,7 +37,7 @@ export default function UserProfile() {
               <div className="mt-3 flex items-center gap-4 text-sm text-muted-foreground">
                 <span className="inline-flex items-center gap-1"><MessageCircle size={14} /> {userPostCount} posts</span>
                 <span className="inline-flex items-center gap-1"><Heart size={14} /> {allRooms.length} rooms</span>
-                <span className="inline-flex items-center gap-1"><Calendar size={14} /> Joined Feb 2025</span>
+                <span className="inline-flex items-center gap-1"><Calendar size={14} /> Joined {userProfile?.joined ?? "N/A"}</span>
               </div>
             </div>
           </div>
