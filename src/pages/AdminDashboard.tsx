@@ -94,17 +94,23 @@ export default function AdminDashboard() {
   const toxicPosts = posts.filter((p) => p.flaggedToxic).length;
   const aiReplies = posts.reduce((acc, p) => acc + p.replies.filter((r) => r.isAI).length, 0);
 
-  // Unique users from posts
+  // Unique users from posts and replies
   const userMap = new Map<string, { email: string; alias: string; postCount: number; replyCount: number; toxicCount: number }>();
   posts.forEach((p) => {
     const key = p.userEmail || p.authorAlias;
     const existing = userMap.get(key) || { email: p.userEmail || "N/A", alias: p.authorAlias, postCount: 0, replyCount: 0, toxicCount: 0 };
     existing.postCount++;
     if (p.flaggedToxic) existing.toxicCount++;
-    p.replies.forEach((r) => {
-      if (!r.isAI && r.authorAlias === p.authorAlias) existing.replyCount++;
-    });
     userMap.set(key, existing);
+
+    // Count replies per unique reply author
+    p.replies.forEach((r) => {
+      if (r.isAI) return;
+      const replyKey = r.authorAlias;
+      const replyUser = userMap.get(replyKey) || { email: "N/A", alias: r.authorAlias, postCount: 0, replyCount: 0, toxicCount: 0 };
+      replyUser.replyCount++;
+      userMap.set(replyKey, replyUser);
+    });
   });
   const allUsers = Array.from(userMap.entries())
     .map(([key, data]) => ({ key, ...data }))
