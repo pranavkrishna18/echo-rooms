@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import { useAuth } from "@/lib/auth";
 import { mockPosts, type Post } from "@/lib/mockData";
 import { getAllRooms } from "@/lib/roomsStore";
-import { User, MessageCircle, Heart, Calendar, AlertTriangle, X } from "lucide-react";
+import { User, MessageCircle, Heart, Calendar } from "lucide-react";
 import RoomCard from "@/components/RoomCard";
+import toast, { Toaster } from "react-hot-toast";
 
 const WARNINGS_KEY = "echoroom_warnings";
 
@@ -47,32 +48,48 @@ export default function UserProfile() {
   const warnings = loadWarnings();
   const userKey = userEmail || userName || "";
   const myWarnings = warnings[userKey] || warnings[userName || ""] || [];
-  const [showWarnings, setShowWarnings] = useState(myWarnings.length > 0);
+  // Show warnings as toasts
+  useEffect(() => {
+    if (!isAdmin && myWarnings.length > 0) {
+      myWarnings.forEach((w, i) => {
+        setTimeout(() => {
+          toast((t) => (
+            <div className="flex items-start gap-3">
+              <span className="text-xl mt-0.5">⚠️</span>
+              <div className="flex-1">
+                <p className="font-semibold text-sm text-red-700">Admin Warning</p>
+                <p className="text-sm text-gray-600 mt-1">{w}</p>
+              </div>
+              <button
+                onClick={() => toast.dismiss(t.id)}
+                className="text-gray-400 hover:text-gray-600 text-lg leading-none"
+              >
+                ×
+              </button>
+            </div>
+          ), {
+            duration: 8000,
+            position: "top-right",
+            style: {
+              background: "#FEF2F2",
+              border: "1px solid #FECACA",
+              borderLeft: "4px solid #EF4444",
+              padding: "16px",
+              maxWidth: "400px",
+              borderRadius: "12px",
+              boxShadow: "0 10px 25px -5px rgba(239, 68, 68, 0.15)",
+            },
+          });
+        }, i * 600);
+      });
+    }
+  }, [isAdmin, myWarnings.length]);
 
   return (
     <div className="min-h-screen bg-background">
+      <Toaster />
       <Navbar />
       <div className="container mx-auto max-w-3xl px-4 py-10">
-        {/* Floating Warning Card */}
-        {!isAdmin && myWarnings.length > 0 && showWarnings && (
-          <div className="fixed bottom-6 right-6 z-50 w-80 animate-fade-in rounded-xl border border-destructive/30 bg-background p-4 shadow-lg">
-            <div className="flex items-start justify-between mb-2">
-              <div className="flex items-center gap-2 text-destructive">
-                <AlertTriangle size={18} />
-                <span className="text-sm font-semibold">Admin Warning{myWarnings.length > 1 ? "s" : ""}</span>
-              </div>
-              <button onClick={() => setShowWarnings(false)} className="rounded p-0.5 text-muted-foreground hover:text-foreground transition-colors">
-                <X size={14} />
-              </button>
-            </div>
-            <div className="space-y-1.5 max-h-40 overflow-y-auto">
-              {myWarnings.map((w, i) => (
-                <p key={i} className="text-xs text-muted-foreground">⚠️ {w}</p>
-              ))}
-            </div>
-          </div>
-        )}
-
         {/* Profile Header */}
         <div className="glass-card rounded-2xl p-8 mb-8">
           <div className="flex items-center gap-5">
