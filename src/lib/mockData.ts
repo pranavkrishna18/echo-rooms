@@ -23,6 +23,18 @@ export interface Reply {
   flaggedToxic: boolean;
 }
 
+export type RoomCategory = "Mental Health" | "Relationships" | "Career" | "Wellness" | "Community";
+
+export const ROOM_CATEGORIES: RoomCategory[] = ["Mental Health", "Relationships", "Career", "Wellness", "Community"];
+
+export const CATEGORY_ICONS: Record<RoomCategory, string> = {
+  "Mental Health": "🧠",
+  "Relationships": "💞",
+  "Career": "💼",
+  "Wellness": "🌿",
+  "Community": "🤝",
+};
+
 export interface Room {
   id: string;
   name: string;
@@ -32,6 +44,7 @@ export interface Room {
   postCount: number;
   topEmotion: Emotion;
   createdBy: string;
+  category: RoomCategory;
 }
 
 export interface MoodDataPoint {
@@ -77,12 +90,12 @@ export const EMOTION_ICONS: Record<Emotion, string> = {
 };
 
 export const mockRooms: Room[] = [
-  { id: "1", name: "Exam Stress", description: "A safe space to share your academic pressures and find support from others going through the same.", emoji: "📚", memberCount: 234, postCount: 892, topEmotion: "anxious", createdBy: "admin" },
-  { id: "2", name: "Breakups & Heartache", description: "Healing together. Share your story, listen to others, and know you're not alone.", emoji: "💔", memberCount: 189, postCount: 654, topEmotion: "sad", createdBy: "admin" },
-  { id: "3", name: "Loneliness", description: "Sometimes just knowing someone hears you makes all the difference.", emoji: "🌙", memberCount: 312, postCount: 1023, topEmotion: "sad", createdBy: "admin" },
-  { id: "4", name: "Career Anxiety", description: "Job hunting, interviews, career changes — let's talk about the stress.", emoji: "💼", memberCount: 156, postCount: 445, topEmotion: "anxious", createdBy: "admin" },
-  { id: "5", name: "Gratitude Circle", description: "Share what you're grateful for today. Small wins matter.", emoji: "🌻", memberCount: 278, postCount: 1201, topEmotion: "hopeful", createdBy: "admin" },
-  { id: "6", name: "Family Struggles", description: "Navigating difficult family dynamics with empathy and understanding.", emoji: "🏠", memberCount: 198, postCount: 567, topEmotion: "angry", createdBy: "admin" },
+  { id: "1", name: "Exam Stress", description: "A safe space to share your academic pressures and find support from others going through the same.", emoji: "📚", memberCount: 234, postCount: 892, topEmotion: "anxious", createdBy: "admin", category: "Mental Health" },
+  { id: "2", name: "Breakups & Heartache", description: "Healing together. Share your story, listen to others, and know you're not alone.", emoji: "💔", memberCount: 189, postCount: 654, topEmotion: "sad", createdBy: "admin", category: "Relationships" },
+  { id: "3", name: "Loneliness", description: "Sometimes just knowing someone hears you makes all the difference.", emoji: "🌙", memberCount: 312, postCount: 1023, topEmotion: "sad", createdBy: "admin", category: "Mental Health" },
+  { id: "4", name: "Career Anxiety", description: "Job hunting, interviews, career changes — let's talk about the stress.", emoji: "💼", memberCount: 156, postCount: 445, topEmotion: "anxious", createdBy: "admin", category: "Career" },
+  { id: "5", name: "Gratitude Circle", description: "Share what you're grateful for today. Small wins matter.", emoji: "🌻", memberCount: 278, postCount: 1201, topEmotion: "hopeful", createdBy: "admin", category: "Wellness" },
+  { id: "6", name: "Family Struggles", description: "Navigating difficult family dynamics with empathy and understanding.", emoji: "🏠", memberCount: 198, postCount: 567, topEmotion: "angry", createdBy: "admin", category: "Relationships" },
 ];
 
 export const mockPosts: Post[] = [

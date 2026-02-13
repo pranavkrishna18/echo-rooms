@@ -3,15 +3,20 @@ import Navbar from "@/components/Navbar";
 import RoomCard from "@/components/RoomCard";
 import UserChatbot from "@/components/UserChatbot";
 import { getAllRooms } from "@/lib/roomsStore";
-import { Plus, Search, Sparkles, Globe } from "lucide-react";
+import { ROOM_CATEGORIES, CATEGORY_ICONS, type RoomCategory } from "@/lib/mockData";
+import { Plus, Search, Sparkles, Globe, LayoutGrid } from "lucide-react";
 import { useState } from "react";
 
 export default function RoomsDashboard() {
   const [search, setSearch] = useState("");
+  const [activeCategory, setActiveCategory] = useState<RoomCategory | "All">("All");
   const rooms = getAllRooms();
-  const filtered = rooms.filter((r) =>
-    r.name.toLowerCase().includes(search.toLowerCase())
-  );
+
+  const filtered = rooms.filter((r) => {
+    const matchesSearch = r.name.toLowerCase().includes(search.toLowerCase());
+    const matchesCategory = activeCategory === "All" || r.category === activeCategory;
+    return matchesSearch && matchesCategory;
+  });
 
   return (
     <div className="min-h-screen bg-background">
@@ -62,25 +67,49 @@ export default function RoomsDashboard() {
         </div>
       </div>
 
-      {/* Room Stats Bar */}
-      <div className="border-b border-border bg-muted/30">
-        <div className="container mx-auto flex items-center gap-6 px-4 py-3">
-          <div className="flex items-center gap-2 text-xs text-muted-foreground">
-            <Sparkles size={14} className="text-primary" />
-            <span className="font-medium text-foreground">{rooms.length}</span> active rooms
-          </div>
-          <div className="h-3 w-px bg-border" />
-          <div className="text-xs text-muted-foreground">
-            <span className="font-medium text-foreground">{rooms.reduce((sum, r) => sum + r.memberCount, 0)}</span> members connected
-          </div>
-          {search && (
-            <>
-              <div className="h-3 w-px bg-border" />
-              <div className="text-xs text-muted-foreground">
-                Showing <span className="font-medium text-foreground">{filtered.length}</span> results
+      {/* Category Filters + Stats Bar */}
+      <div className="border-b border-border bg-card/50 backdrop-blur-sm">
+        <div className="container mx-auto px-4 py-3">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            {/* Category chips */}
+            <div className="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0">
+              <button
+                onClick={() => setActiveCategory("All")}
+                className={`inline-flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
+                  activeCategory === "All"
+                    ? "bg-primary text-primary-foreground shadow-sm"
+                    : "bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground"
+                }`}
+              >
+                <LayoutGrid size={12} /> All
+              </button>
+              {ROOM_CATEGORIES.map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setActiveCategory(cat)}
+                  className={`inline-flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
+                    activeCategory === cat
+                      ? "bg-primary text-primary-foreground shadow-sm"
+                      : "bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground"
+                  }`}
+                >
+                  <span>{CATEGORY_ICONS[cat]}</span> {cat}
+                </button>
+              ))}
+            </div>
+
+            {/* Stats */}
+            <div className="flex items-center gap-4 text-xs text-muted-foreground">
+              <div className="flex items-center gap-1.5">
+                <Sparkles size={12} className="text-primary" />
+                <span className="font-medium text-foreground">{filtered.length}</span> rooms
               </div>
-            </>
-          )}
+              <div className="h-3 w-px bg-border" />
+              <div>
+                <span className="font-medium text-foreground">{filtered.reduce((sum, r) => sum + r.memberCount, 0)}</span> members
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -105,7 +134,7 @@ export default function RoomsDashboard() {
             </div>
             <h3 className="font-display text-lg font-semibold text-foreground">No rooms found</h3>
             <p className="mt-1 text-sm text-muted-foreground">
-              No rooms matching "{search}" — try a different search or create one!
+              Try a different search or category, or create a new room!
             </p>
           </div>
         )}

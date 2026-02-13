@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Room } from "@/lib/mockData";
+import { Room, CATEGORY_ICONS } from "@/lib/mockData";
 import EmotionBadge from "./EmotionBadge";
 import { Users, MessageCircle, LogIn, LogOut, ArrowRight } from "lucide-react";
 import { useAuth } from "@/lib/auth";
@@ -44,9 +44,16 @@ export default function RoomCard({ room }: { room: Room }) {
           <h3 className="mb-1.5 font-display text-lg font-semibold text-foreground transition-colors group-hover:text-primary">
             {room.name}
           </h3>
-          <p className="mb-5 text-sm leading-relaxed text-muted-foreground line-clamp-2">
+          <p className="mb-3 text-sm leading-relaxed text-muted-foreground line-clamp-2">
             {room.description}
           </p>
+
+          {/* Category tag */}
+          <div className="mb-4">
+            <span className="inline-flex items-center gap-1 rounded-md bg-accent/10 px-2 py-0.5 text-[11px] font-medium text-accent-foreground/70">
+              {CATEGORY_ICONS[room.category]} {room.category}
+            </span>
+          </div>
 
           {/* Footer */}
           <div className="flex items-center justify-between">

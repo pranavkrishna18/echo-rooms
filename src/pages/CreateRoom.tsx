@@ -4,6 +4,7 @@ import Navbar from "@/components/Navbar";
 import { ArrowLeft, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import { addRoom } from "@/lib/roomsStore";
+import { ROOM_CATEGORIES, CATEGORY_ICONS, type RoomCategory } from "@/lib/mockData";
 
 const EMOJIS = ["📚", "💔", "🌙", "💼", "🌻", "🏠", "🎵", "🧠", "💪", "🌊", "🕊️", "🔥"];
 
@@ -11,6 +12,7 @@ export default function CreateRoom() {
   const [name, setName] = useState("");
   const [desc, setDesc] = useState("");
   const [emoji, setEmoji] = useState("🌻");
+  const [category, setCategory] = useState<RoomCategory>("Mental Health");
   const [created, setCreated] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -26,7 +28,7 @@ export default function CreateRoom() {
       return;
     }
     setError("");
-    addRoom({ name: name.trim(), description: desc.trim(), emoji });
+    addRoom({ name: name.trim(), description: desc.trim(), emoji, category });
     setCreated(true);
     setTimeout(() => navigate("/rooms"), 2000);
   };
@@ -90,6 +92,21 @@ export default function CreateRoom() {
                       className={`flex h-10 w-10 items-center justify-center rounded-lg text-xl transition-all ${emoji === e ? "bg-primary/15 ring-2 ring-primary scale-110" : "bg-muted hover:bg-muted/80"}`}
                     >
                       {e}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <label className="mb-1.5 block text-sm font-medium text-foreground">Category</label>
+                <div className="flex flex-wrap gap-2">
+                  {ROOM_CATEGORIES.map((cat) => (
+                    <button
+                      key={cat}
+                      type="button"
+                      onClick={() => setCategory(cat)}
+                      className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm transition-all ${category === cat ? "bg-primary/15 ring-2 ring-primary font-semibold text-primary" : "bg-muted text-muted-foreground hover:bg-muted/80"}`}
+                    >
+                      {CATEGORY_ICONS[cat]} {cat}
                     </button>
                   ))}
                 </div>
