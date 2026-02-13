@@ -5,3 +5,6 @@ verify_jwt = false
 
 [functions.admin-chat]
 verify_jwt = false
+
+[functions.user-chat]
+verify_jwt = false
