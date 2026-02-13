@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import { Eye, EyeOff } from "lucide-react";
+import { useAuth } from "@/lib/auth";
 
 export default function Register() {
   const [name, setName] = useState("");
@@ -9,11 +10,18 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [showPass, setShowPass] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
+  const { register } = useAuth();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !email.trim() || !password.trim()) return;
+    const success = register(name.trim(), email.trim(), password);
+    if (!success) {
+      setError("An account with this email already exists.");
+      return;
+    }
     setSubmitted(true);
     setTimeout(() => navigate("/login"), 2000);
   };
@@ -38,6 +46,7 @@ export default function Register() {
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
+                {error && <p className="text-sm text-destructive text-center">{error}</p>}
                 <div>
                   <label className="mb-1.5 block text-sm font-medium text-foreground">Full Name</label>
                   <input
