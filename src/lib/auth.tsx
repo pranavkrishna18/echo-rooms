@@ -6,8 +6,11 @@ interface UserProfile {
   joined: string;
 }
 
+const ADMIN_EMAIL = "tarunadithya2006@gmail.com";
+
 interface AuthContextType {
   isLoggedIn: boolean;
+  isAdmin: boolean;
   userEmail: string | null;
   userName: string | null;
   userProfile: UserProfile | null;
@@ -68,8 +71,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUserProfile(null);
   };
 
+  const isAdmin = userEmail === ADMIN_EMAIL;
+
   return (
-    <AuthContext.Provider value={{ isLoggedIn, userEmail, userName, userProfile, login, logout }}>
+    <AuthContext.Provider value={{ isLoggedIn, isAdmin, userEmail, userName, userProfile, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

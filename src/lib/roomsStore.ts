@@ -33,3 +33,21 @@ export function addRoom(room: Omit<Room, "id" | "memberCount" | "postCount" | "t
   saveCustomRooms(custom);
   return newRoom;
 }
+
+export function deleteRoom(roomId: string) {
+  // Remove from custom rooms
+  const custom = loadCustomRooms().filter(r => r.id !== roomId);
+  saveCustomRooms(custom);
+  // Remove posts for this room
+  try {
+    const stored = localStorage.getItem("echoroom_posts");
+    if (stored) {
+      const all = JSON.parse(stored).filter((p: any) => p.roomId !== roomId);
+      localStorage.setItem("echoroom_posts", JSON.stringify(all));
+    }
+  } catch {}
+}
+
+export function isDefaultRoom(roomId: string): boolean {
+  return mockRooms.some(r => r.id === roomId);
+}
