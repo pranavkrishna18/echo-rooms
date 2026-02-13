@@ -9,8 +9,12 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
-const VALID_EMAIL = "tarunadithya2006@gmail.com";
-const VALID_PASSWORD = "Adithya123";
+const VALID_CREDENTIALS = [
+  { email: "tarunadithya2006@gmail.com", password: "Adithya123" },
+  { email: "pranavkrishna2796@gmail.com", password: "pk@29" },
+  { email: "thapan23@gmail.com", password: "pachipulusu@7" },
+  { email: "lokesh1@gmail.com", password: "loki@23" },
+];
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -25,7 +29,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const login = (email: string, password: string): boolean => {
-    if (email === VALID_EMAIL && password === VALID_PASSWORD) {
+    if (VALID_CREDENTIALS.some(c => c.email === email && c.password === password)) {
       localStorage.setItem("echoroom_auth", email);
       setIsLoggedIn(true);
       setUserEmail(email);
