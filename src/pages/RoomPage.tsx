@@ -34,7 +34,7 @@ function savePosts(roomId: string, posts: Post[]) {
 
 export default function RoomPage() {
   const { id } = useParams<{ id: string }>();
-  const { userEmail } = useAuth();
+  const { userEmail, userName } = useAuth();
   const room = getAllRooms().find((r) => r.id === id);
   const [posts, setPosts] = useState<Post[]>(() => loadPosts(id || ""));
   const [newPost, setNewPost] = useState("");
@@ -68,7 +68,6 @@ export default function RoomPage() {
 
     setToxicWarning("");
     const emotion: Emotion = classifyEmotion(newPost);
-    const alias = getRandomAlias();
     const newPostObj: Post = {
       id: `p${Date.now()}`,
       roomId: room.id,
@@ -77,7 +76,7 @@ export default function RoomPage() {
       emotion,
       timestamp: new Date().toISOString(),
       anonymous: true,
-      authorAlias: alias,
+      authorAlias: userName || "Anonymous",
       replies: [
         {
           id: `r${Date.now()}`,
