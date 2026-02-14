@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Post, Reply, isToxic } from "@/lib/mockData";
 import { checkToxicity, autoWarnUser } from "@/lib/aiService";
+import { supabase } from "@/integrations/supabase/client";
 import EmotionBadge from "./EmotionBadge";
-import { Clock, AlertTriangle, Bot, Flag, Send, MessageCircle, Loader2, Heart } from "lucide-react";
+import { Clock, AlertTriangle, Bot, Flag, Send, MessageCircle, Loader2, Heart, MessageSquarePlus } from "lucide-react";
 import toast from "react-hot-toast";
 
 function timeAgo(timestamp: string): string {
@@ -18,9 +20,11 @@ interface PostCardProps {
   post: Post;
   onReply?: (postId: string, reply: Reply) => void;
   currentUserName?: string;
+  currentUserEmail?: string;
 }
 
-export default function PostCard({ post, onReply, currentUserName }: PostCardProps) {
+export default function PostCard({ post, onReply, currentUserName, currentUserEmail }: PostCardProps) {
+  const navigate = useNavigate();
   const [replyText, setReplyText] = useState("");
   const [showReplyInput, setShowReplyInput] = useState(false);
   const [toxicWarning, setToxicWarning] = useState("");
@@ -76,6 +80,15 @@ export default function PostCard({ post, onReply, currentUserName }: PostCardPro
       <div className="mb-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span className="text-sm font-medium text-foreground">{post.authorAlias}</span>
+          {post.userEmail && post.userEmail !== currentUserEmail && (
+            <button
+              onClick={() => navigate("/people")}
+              className="text-muted-foreground hover:text-primary transition-colors"
+              title={`Chat with ${post.authorAlias}`}
+            >
+              <MessageSquarePlus size={14} />
+            </button>
+          )}
           <EmotionBadge emotion={post.emotion} />
         </div>
         <div className="flex items-center gap-2">

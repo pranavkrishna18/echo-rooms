@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/lib/auth";
-import { LogOut, User, Shield, Home } from "lucide-react";
+import { LogOut, User, Shield, Home, Users } from "lucide-react";
 
 export default function Navbar() {
   const { isLoggedIn, logout } = useAuth();
@@ -28,6 +28,9 @@ export default function Navbar() {
               </Link>
               <Link to="/profile" className="inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
                 <User size={16} /> Profile
+              </Link>
+              <Link to="/people" className="inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
+                <Users size={16} /> People
               </Link>
               <Link to="/admin" className="inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
                 <Shield size={16} /> Admin

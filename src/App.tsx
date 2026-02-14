@@ -12,6 +12,8 @@ import RoomPage from "./pages/RoomPage";
 import CreateRoom from "./pages/CreateRoom";
 import UserProfile from "./pages/UserProfile";
 import AdminDashboard from "./pages/AdminDashboard";
+import UserDirectory from "./pages/UserDirectory";
+import PrivateChat from "./pages/PrivateChat";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,6 +34,8 @@ const AppRoutes = () => (
       <Route path="/room/:id" element={<ProtectedRoute><RoomPage /></ProtectedRoute>} />
       <Route path="/create-room" element={<ProtectedRoute><CreateRoom /></ProtectedRoute>} />
       <Route path="/profile" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
+      <Route path="/people" element={<ProtectedRoute><UserDirectory /></ProtectedRoute>} />
+      <Route path="/chat/:id" element={<ProtectedRoute><PrivateChat /></ProtectedRoute>} />
       <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
       <Route path="*" element={<NotFound />} />
     </Routes>

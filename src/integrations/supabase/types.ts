@@ -14,7 +14,74 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      chat_requests: {
+        Row: {
+          created_at: string
+          from_email: string
+          from_name: string
+          id: string
+          status: string
+          to_email: string
+          to_name: string
+        }
+        Insert: {
+          created_at?: string
+          from_email: string
+          from_name: string
+          id?: string
+          status?: string
+          to_email: string
+          to_name: string
+        }
+        Update: {
+          created_at?: string
+          from_email?: string
+          from_name?: string
+          id?: string
+          status?: string
+          to_email?: string
+          to_name?: string
+        }
+        Relationships: []
+      }
+      private_messages: {
+        Row: {
+          content: string
+          created_at: string
+          flagged_toxic: boolean
+          id: string
+          request_id: string
+          sender_email: string
+          sender_name: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          flagged_toxic?: boolean
+          id?: string
+          request_id: string
+          sender_email: string
+          sender_name: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          flagged_toxic?: boolean
+          id?: string
+          request_id?: string
+          sender_email?: string
+          sender_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "private_messages_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "chat_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never

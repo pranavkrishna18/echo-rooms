@@ -198,7 +198,7 @@ export default function RoomPage() {
         <div className="space-y-4">
           {posts.map((post, i) => (
             <div key={post.id} className="opacity-0 animate-fade-in" style={{ animationDelay: `${i * 60}ms` }}>
-              <PostCard post={post} onReply={handleReply} currentUserName={userName || "Anonymous"} />
+              <PostCard post={post} onReply={handleReply} currentUserName={userName || "Anonymous"} currentUserEmail={userEmail || ""} />
             </div>
           ))}
           {posts.length === 0 && (
