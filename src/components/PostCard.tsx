@@ -25,19 +25,12 @@ export default function PostCard({ post, onReply, currentUserName }: PostCardPro
   const [showReplyInput, setShowReplyInput] = useState(false);
   const [toxicWarning, setToxicWarning] = useState("");
   const [isChecking, setIsChecking] = useState(false);
-  const [likes, setLikes] = useState<Record<string, number>>({});
-  const [likedByMe, setLikedByMe] = useState<Record<string, boolean>>({});
+  const [postLikes, setPostLikes] = useState(0);
+  const [postLiked, setPostLiked] = useState(false);
 
-  const toggleLike = (replyId: string) => {
-    setLikedByMe(prev => {
-      const wasLiked = prev[replyId];
-      return { ...prev, [replyId]: !wasLiked };
-    });
-    setLikes(prev => {
-      const current = prev[replyId] || 0;
-      const wasLiked = likedByMe[replyId];
-      return { ...prev, [replyId]: wasLiked ? current - 1 : current + 1 };
-    });
+  const togglePostLike = () => {
+    setPostLiked(prev => !prev);
+    setPostLikes(prev => postLiked ? prev - 1 : prev + 1);
   };
 
   const handleReply = async () => {
@@ -116,16 +109,6 @@ export default function PostCard({ post, onReply, currentUserName }: PostCardPro
                 {reply.flaggedToxic && <Flag size={12} className="text-destructive" />}
               </div>
               <p className="text-sm text-foreground/90">{reply.content}</p>
-              <button
-                onClick={() => toggleLike(reply.id)}
-                className="mt-2 inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-destructive transition-colors"
-              >
-                <Heart
-                  size={14}
-                  className={likedByMe[reply.id] ? "fill-destructive text-destructive" : ""}
-                />
-                <span>{(likes[reply.id] || 0) > 0 ? likes[reply.id] : ""}</span>
-              </button>
             </div>
           ))}
         </div>
@@ -134,12 +117,24 @@ export default function PostCard({ post, onReply, currentUserName }: PostCardPro
       {/* Reply section */}
       <div className="mt-3 border-t border-border pt-3">
         {!showReplyInput ? (
-          <button
-            onClick={() => setShowReplyInput(true)}
-            className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <MessageCircle size={14} /> Reply
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setShowReplyInput(true)}
+              className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <MessageCircle size={14} /> Reply
+            </button>
+            <button
+              onClick={togglePostLike}
+              className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-destructive transition-colors"
+            >
+              <Heart
+                size={14}
+                className={postLiked ? "fill-destructive text-destructive" : ""}
+              />
+              {postLikes > 0 && <span className={postLiked ? "text-destructive" : ""}>{postLikes}</span>}
+            </button>
+          </div>
         ) : (
           <div className="space-y-2">
             <textarea
